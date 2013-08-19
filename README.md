@@ -1,4 +1,4 @@
-ZendSkeletonApplication
+ZendSkeletonApplication With Doctrine2 Integration
 =======================
 
 Introduction
@@ -7,44 +7,47 @@ This is a simple, skeleton application using the ZF2 MVC layer and module
 systems. This application is meant to be used as a starting place for those
 looking to get their feet wet with ZF2.
 
+It comes together with doctrine 2 integration (thanks to the tutorial http://marco-pivetta.com/doctrine-orm-zf2-tutorial by Marco Pivetta).
+
 
 Installation
 ------------
 
 Using Composer (recommended)
 ----------------------------
-The recommended way to get a working copy of this project is to clone the repository
-and use `composer` to install dependencies using the `create-project` command:
+Install Composer, please refer to Composer's manual for help. Once done, switch to the skeleton's directory and run
 
-    curl -s https://getcomposer.org/installer | php --
-    php composer.phar create-project -sdev --repository-url="http://packages.zendframework.com" zendframework/skeleton-application path/to/install
-
-Alternately, clone the repository and manually invoke `composer` using the shipped
-`composer.phar`:
-
-    cd my/project/dir
-    git clone git://github.com/zendframework/ZendSkeletonApplication.git
-    cd ZendSkeletonApplication
     php composer.phar self-update
     php composer.phar install
 
 (The `self-update` directive is to ensure you have an up-to-date `composer.phar`
 available.)
 
-Another alternative for downloading the project is to grab it via `curl`, and
-then pass it to `tar`:
+Enable ZF Developer Toolbar
+---------------------------
+`cp vendor/zendframework/zend-developer-tools/config/zenddevelopertools.local.php.dist config/autoload/zdt.local.php`
 
-    cd my/project/dir
-    curl -#L https://github.com/zendframework/ZendSkeletonApplication/tarball/master | tar xz --strip-components=1
+Configure Doctrine
+------------------
 
-You would then invoke `composer` to install dependencies per the previous
-example.
+Create a file config/autoload/doctrine.local.php which contains the database configuration:
 
-Using Git submodules
---------------------
-Alternatively, you can install using native git submodules:
+    return array(
+        'doctrine' => array(
+            'connection' => array(
+                'orm_default' => array(
+                    'driverClass' =>'Doctrine\DBAL\Driver\PDOMySql\Driver',
+                    'params' => array(
+                    'host'     => 'localhost',
+                    'port'     => '3306',
+                    'user'     => 'username',
+                    'password' => 'password',
+                    'dbname'   => 'database',
+    )))));
 
-    git clone git://github.com/zendframework/ZendSkeletonApplication.git --recursive
+Validate mappings by running `./vendor/bin/doctrine-module orm:validate-schema`
+
+Generate database schema by running `./vendor/bin/doctrine-module orm:schema-tool:create`
 
 Virtual Host
 ------------
